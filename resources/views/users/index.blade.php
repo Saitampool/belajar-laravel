@@ -25,6 +25,7 @@
                     <x-table.th>Name</x-table.th>
                     <x-table.th>Email</x-table.th>
                     <x-table.th>Created At</x-table.th>
+                    <x-table.th>Action</x-table.th>
                 </tr>
             </x-table.thead>
             <x-table.tbody>
@@ -34,6 +35,14 @@
                         <td>{{ $user->name }}</td>
                         <td>{{ $user->email }}</td>
                         <td>{{ (new \Carbon\Carbon($user->published_at))->format('d F y') }}</td>
+                        <td>
+                            <a href="/users/{{ $user->id }}">
+                                View
+                            </a>
+                            <a href="/users/{{ $user->id }}/edit">
+                                Edit
+                            </a>
+                        </td>
                     </tr>
                 @endforeach
             </x-table.tbody>
