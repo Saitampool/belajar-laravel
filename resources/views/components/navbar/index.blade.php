@@ -12,7 +12,8 @@
                         <x-navbar.link href="/about">About</x-navbar.link>
                         <x-navbar.link href="/contact">Contact</x-navbar.link>
                         <x-navbar.link href="/gallery">Gallery</x-navbar.link>
-                        <x-navbar.link href="/users">Users</x-navbar.link>
+                        <x-navbar.link href="{{ route('users.index') }}">Users</x-navbar.link>
+                        <x-navbar.link href="{{ route('login') }}">Login</x-navbar.link>
                     </div>
                 </div>
             </div>
