@@ -16,11 +16,12 @@ Route::get('/about', [Controllers\AboutController::class, 'index']);
 Route::get('/contact', [Controllers\ContactController::class, 'index']);
 Route::get('/gallery', [Controllers\GalleryController::class, 'index']);
 
-Route::get('login', [Controllers\LoginController::class, 'loginForm'])->name('login');
-Route::post('login', [Controllers\LoginController::class, 'authenticate']);
+Route::get('login', [Controllers\LoginController::class, 'loginForm'])->name('login')->middleware('guest');
+Route::post('login', [Controllers\LoginController::class, 'authenticate'])->middleware('guest');
+Route::post('logout', Controllers\LogoutController::class)->name('logout')->middleware('auth');
 
-// Route Resource
-Route::resource('users', Controllers\UserController::class);
+// Route Resource 
+Route::resource('users', Controllers\UserController::class)->middleware('auth');
 
 
 // Route 
