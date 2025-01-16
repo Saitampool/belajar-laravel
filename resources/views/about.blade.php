@@ -2,21 +2,18 @@
     <x-slot name="heading">
         About
     </x-slot>
-    <div class="w-full flex">
-        <input id="search" type="text" class="w-[300px] py-2 px-4 rounded-l-xl outline-none" placeholder="search"
-            autocomplete="off">
-        <button type="submit" class="bg-blue-800 hover:bg-blue-600 flex items-center py-2 px-3 rounded-r-xl">
-            <svg class="w-6 h-6 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24"
-                height="24" fill="none" viewBox="0 0 24 24">
-                <path stroke="currentColor" stroke-linecap="round" stroke-width="2"
-                    d="m21 21-3.5-3.5M17 10a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z" />
-            </svg>
-        </button>
+    <div class="w-full flex flex-col">
+        <div class="flex">
+            <input id="search" type="text" class="w-[300px] py-2 px-4 rounded-xl outline-none border"
+                placeholder="search" autocomplete="off">
+        </div>
+        <ul id="suggestions" class="bg-white border rounded-lg mt-12 w-[300px] hidden absolute z-10"></ul>
+        <textarea id="description" class="w-[300px] bg-white mt-4 p-2 border rounded-lg resize-none" rows="5"
+            placeholder="Deskripsi akan tampil di sini" disabled></textarea>
     </div>
-    <ul id="suggestions" class="bg-white border rounded-lg mt-2 w-[300px] hidden"></ul>
     <script>
         document.getElementById('search').addEventListener('input', function() {
-            const query = this.value;
+            const query = this.value.trim(); // Hapus spasi berlebih
             const suggestionsBox = document.getElementById('suggestions');
 
             if (query.length > 0) {
@@ -26,15 +23,26 @@
                         suggestionsBox.innerHTML = data.map(fruit =>
                             `<li class="px-4 py-2 hover:bg-gray-100 cursor-pointer">${fruit}</li>`).join('');
                         suggestionsBox.classList.remove('hidden');
-                    });
+                    })
+                    .catch(error => console.error('Error:', error));
             } else {
-                suggestionsBox.classList.add('hidden');
+                suggestionsBox.classList.add('hidden'); // Sembunyikan suggestions ketika input kosong
             }
         });
 
         document.getElementById('suggestions').addEventListener('click', function(e) {
             if (e.target.tagName === 'LI') {
-                document.getElementById('search').value = e.target.textContent;
+                const selectedValue = e.target.textContent.trim(); // Hapus spasi di awal/akhir teks
+                document.getElementById('search').value = selectedValue;
+
+                // Ambil deskripsi buah berdasarkan nama
+                fetch(`/get-fruit-description?name=${encodeURIComponent(selectedValue)}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        document.getElementById('description').value = data.description;
+                    })
+                    .catch(error => console.error('Error:', error));
+
                 this.classList.add('hidden');
             }
         });

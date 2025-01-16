@@ -17,6 +17,7 @@ Route::get('/contact', [Controllers\ContactController::class, 'index']);
 Route::get('/gallery', [Controllers\GalleryController::class, 'index']);
 
 Route::get('/autocomplete-fruits', [Controllers\FruitController::class, 'autocomplete'])->name('fruits.autocomplete');
+Route::get('/get-fruit-description', [Controllers\FruitController::class, 'getFruitDescription']);
 
 Route::get('login', [Controllers\LoginController::class, 'loginForm'])->name('login')->middleware('guest');
 Route::post('login', [Controllers\LoginController::class, 'authenticate'])->middleware('guest');
